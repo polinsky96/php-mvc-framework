@@ -59,6 +59,16 @@ abstract class Model
         return empty($this->errors);
     }
 
+    public function hasError(string $attribute): bool
+    {
+        return array_key_exists($attribute, $this->errors);
+    }
+
+    public function getFirstError(string $attribute): string
+    {
+        return $this->errors[$attribute][0] ?? '';
+    }
+
     protected function addError(string $attribute, string $rule, array $params = []): void
     {
         $message = $this->errorMessages()[$rule] ?? '';
