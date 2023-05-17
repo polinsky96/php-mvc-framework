@@ -31,8 +31,10 @@ class AuthController extends Controller
             $registerModel->loadData($request->getBody());
             
             if ($registerModel->validate() && $registerModel->register()) {
-                return "success";
-            } 
+                return $this->render('login'); 
+            } else {
+                echo "something wrong";
+            }
         }
         
         return $this->render('register', [

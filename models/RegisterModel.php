@@ -8,7 +8,7 @@ use app\core\Model;
  * Class RegisterModel
  * 
  * @package app\models
- */ 
+ */
 class RegisterModel extends Model
 {
     public string $firstname = '';
@@ -17,8 +17,20 @@ class RegisterModel extends Model
     public string $password = '';
     public string $confirmPassword = '';
 
-    public function register(): void
+    public function register(): bool
     {
+        try {
+            $values = [
+                ':firstname' => $this->firstname,
+                ':lastname' => $this->lastname,
+                ':email' => $this->email,
+                ':password' => $this->password
+            ];
+
+            return $this->db->insert('users', $values);
+        } catch (\Throwable $th) {
+            return false;
+        }
     }
 
     public function rules(): array
@@ -33,7 +45,7 @@ class RegisterModel extends Model
                 [self::RULE_MIN, 'min' => 3]
             ],
             'email' => [
-                self::RULE_REQUIRED, 
+                self::RULE_REQUIRED,
                 self::RULE_EMAIL
             ],
             'password' => [

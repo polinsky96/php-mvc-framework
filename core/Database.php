@@ -18,6 +18,22 @@ class Database
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 
+    public function insert(string $table, array $values)
+    {
+        try {
+            $keys = array_keys($values);
+            $columns = implode(", ", array_map(fn ($k) => str_replace(':', '', $k), $keys));
+            $params = implode(", ", $keys);
+
+            $statement = $this->pdo->prepare("INSERT INTO $table ($columns) VALUES ($params)");
+            $statement->execute($values);
+
+            return true;
+        } catch (\Throwable $th) {
+            throw new \Throwable($th);
+        }
+    }
+
     public function applyMigration(): void
     {
         $newMigrations = [];
@@ -70,7 +86,7 @@ class Database
 
     protected function saveMigration(array $migrations): void
     {
-        $queryValues = implode(",", array_map(fn($m) => "('$m')", $migrations));
+        $queryValues = implode(",", array_map(fn ($m) => "('$m')", $migrations));
 
         $statment = $this->pdo->prepare("INSERT INTO migrations (migration) VALUES $queryValues");
         $statment->execute();

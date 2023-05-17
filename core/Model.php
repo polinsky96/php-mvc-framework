@@ -14,8 +14,14 @@ abstract class Model
     public const RULE_MIN = 'min';
     public const RULE_MAX = 'max';
     public const RULE_MATCH = 'match';
-
+    
     public array $errors = [];
+    
+    protected Database $db;
+    
+    public function __construct() {
+        $this->db = Application::$app->db;
+    }
 
     public function loadData(array $data): void
     {
