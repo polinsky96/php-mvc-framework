@@ -18,7 +18,7 @@ class Database
         $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     }
 
-    public function insert(string $table, array $values)
+    public function insert(string $table, array $values): bool
     {
         try {
             $keys = array_keys($values);
@@ -29,8 +29,8 @@ class Database
             $statement->execute($values);
 
             return true;
-        } catch (\Throwable $th) {
-            throw new \Throwable($th);
+        } catch (\PDOException $th) {
+            throw new \PDOException($th);
         }
     }
 

@@ -28,7 +28,7 @@ class RegisterModel extends Model
             ];
 
             return $this->db->insert('users', $values);
-        } catch (\Throwable $th) {
+        } catch (\PDOException $th) {
             return false;
         }
     }

@@ -11,13 +11,15 @@ class Router
 {
     public Request $request;
     public Response $response;
+    public Session $session;
 
     protected array $routes = [];
 
-    public function __construct(Request $request, Response $response)
+    public function __construct(Request $request, Response $response, Session $session)
     {
         $this->request = $request;
         $this->response = $response;
+        $this->session = $session;
     }
 
     public function get(string $path, $callback): void

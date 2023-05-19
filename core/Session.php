@@ -3,28 +3,21 @@
 namespace app\core;
 
 /**
- * Class Migration
+ * Class Session
  * 
  * @package app\core
  */
 
 class Session
 {
-    public function setUserSession(string $userId, string $username): void
+    public function setUserSession(string $userId): void
     {
-        $_SESSION['username'] = $username;
         $_SESSION['user_id'] = $userId;
     }
 
     public function closeUserSession(): void
     {
-        unset($_SESSION['username']);
         unset($_SESSION['user_id']);
-    }
-
-    public function getUsername(): string
-    {
-        return $_SESSION['username'] ?? '';
     }
 
     public function getUserId(): string
@@ -34,6 +27,6 @@ class Session
 
     public function isUser(): bool
     {
-        return isset($_SESSION['username']);
+        return isset($_SESSION['user_id']);
     }
 }
