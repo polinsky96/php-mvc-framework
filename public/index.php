@@ -30,5 +30,7 @@ $app->router->post('/register', [new AuthController(), 'register']);
 
 $app->run();
 
-// echo 'id: ' . $app->session->getUserId() . PHP_EOL;
-// echo 'username: ' . $app->session->getUsername() . PHP_EOL;
+
+if ($app->session->isUser()) {
+    echo 'user_id: ' . $app->session->getUserId() . PHP_EOL;
+}
