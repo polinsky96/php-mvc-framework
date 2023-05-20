@@ -2,7 +2,10 @@
 
 namespace app\models;
 
+use app\core\Application;
 use app\core\Model;
+use app\core\Session;
+use PDO;
 
 /**
  * Class UserModel
@@ -16,14 +19,61 @@ class UserModel extends Model
     private string $lastname = '';
     private string $email = '';
 
-    public function __construct(string $userId, string $firstname, string $lastname, string $email) {
-        $this->userId = $userId;
-        $this->firstname = $firstname;
-        $this->lastname = $lastname;
-        $this->email = $email;
+    private bool $isUser = false;
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        $this->userId = Session::getSessionElement('user_id');
+
+        if ($this->userId !== '') {
+            $user = $this->loadUserData($this->userId);
+
+            if ($user) {
+                $this->firstname = $user['firstname'] ?? '';
+                $this->lastname = $user['lastname'] ?? '';
+                $this->email = $user['email'] ?? '';
+    
+                $this->isUser = true;
+            }
+        }
     }
 
-    public function rules(): array {
+    public function getUserId(): string
+    {
+        return $this->userId;
+    }
+
+    public function getFirstname(): string
+    {
+        return $this->firstname;
+    }
+
+    public function getLastname(): string
+    {
+        return $this->lastname;
+    }
+
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    public function isUser(): bool
+    {
+        return $this->isUser;
+    }
+
+    private function loadUserData(string $id): array | bool
+    {
+        $statement = $this->db->pdo->prepare("SELECT id, firstname, lastname, email FROM users WHERE id = '$id'");
+        $statement->execute();
+        return $statement->fetch();
+    }
+
+    public function rules(): array
+    {
         return [];
     }
 }

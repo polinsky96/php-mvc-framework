@@ -9,24 +9,31 @@ namespace app\core;
  */
 
 class Session
-{
-    public function setUserSession(string $userId): void
+{   
+    public static function start(): void
     {
-        $_SESSION['user_id'] = $userId;
+        session_start();
     }
 
-    public function closeUserSession(): void
+    public static function close(): void
     {
-        unset($_SESSION['user_id']);
+        $_SESSION = [];
+        unset($_COOKIE[session_name()]);
+        session_destroy();
     }
 
-    public function getUserId(): string
+    public static function add(string $key, mixed $element): void
     {
-        return $_SESSION['user_id'] ?? '';
+        $_SESSION[$key] = $element;
     }
 
-    public function isUser(): bool
+    public static function unset(string $key): void
     {
-        return isset($_SESSION['user_id']);
+        unset($_SESSION[$key]);
+    }
+
+    public static function getSessionElement(string $key): mixed
+    {
+        return $_SESSION["$key"] ?? '';
     }
 }

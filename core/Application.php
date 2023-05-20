@@ -2,6 +2,8 @@
 
 namespace app\core;
 
+use app\models\UserModel;
+
 /**
  * Class Application
  * 
@@ -11,6 +13,7 @@ class Application
 {   
     public static string $ROOT_DIR;
     public static Application $app;
+    public static UserModel $user;
     public Database $db;
     public Router $router;
     public Request $request;
@@ -31,6 +34,7 @@ class Application
         $this->router = new Router($this->request, $this->response, $this->session);
 
         $this->db = new Database($config['db']);
+        $this::$user = new UserModel(); 
     }
 
     public function run()

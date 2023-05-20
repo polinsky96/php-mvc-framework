@@ -24,7 +24,7 @@ class RegisterModel extends Model
                 ':firstname' => $this->firstname,
                 ':lastname' => $this->lastname,
                 ':email' => $this->email,
-                ':password' => $this->password
+                ':password' => password_hash($this->password, PASSWORD_DEFAULT)
             ];
 
             return $this->db->insert('users', $values);

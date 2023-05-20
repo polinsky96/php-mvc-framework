@@ -16,7 +16,8 @@ use app\models\RegisterModel;
 
 class AuthController extends Controller
 {
-    public function __construct() {
+    public function __construct()
+    {
         $this->setLayout('auth');
     }
 
@@ -26,18 +27,23 @@ class AuthController extends Controller
 
         if ($request->isPost()) {
             $loginModel->loadData($request->getBody());
-            
-            if ($loginModel->validate() && $loginModel->login()) {
-                // $session->setUserSession($loginModel->)
-                // return $this->render('login'); 
+
+            if ($loginModel->validate()) {
+                $userId = $loginModel->login();
+
+                if ($userId) {
+                    $session->add('user_id', $userId);
+
+                    header("location: /");
+                }
             } else {
                 echo "something wrong";
             }
         }
-        
+
         return $this->render('login', [
             'model' => $loginModel
-        ]); 
+        ]);
     }
 
     public function register(Request $request): string
@@ -46,16 +52,16 @@ class AuthController extends Controller
 
         if ($request->isPost()) {
             $registerModel->loadData($request->getBody());
-            
+
             if ($registerModel->validate() && $registerModel->register()) {
-                return $this->render('login'); 
+                header("location: /");
             } else {
                 echo "something wrong";
             }
         }
-        
+
         return $this->render('register', [
             'model' => $registerModel
-        ]); 
+        ]);
     }
 }
